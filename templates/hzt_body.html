@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <!--Block head of body-->
+    {% block head_body %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+    {# Layout horizontal: cabecera fija y contenido fluido (Bootstrap 4 + app-shell). #}
+    <body class="app-layout app-layout--horizontal d-flex flex-column min-vh-100">
+    <div class="d-flex flex-column flex-grow-1 min-vh-100">
+        {% include 'hzt_header.html' %}
+        {% block section_content %}
+            <main class="app-main flex-grow-1 d-flex flex-column">
+                <section class="app-main__toolbar">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {% block breadcrumb %}
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}"><i
+                                                    class="fas fa-home"></i> Panel</a></li>
+                                            {% block breadcrumb_li %}
+                                                {% if request.session.module %}
+                                                    <li class="breadcrumb-item active" aria-current="page"><a
+                                                            href="{{ request.session.module.url }}"><i
+                                                            class="{{ request.session.module.get_icon }}"></i> {{ request.session.module.name }}
+                                                    </a></li>
+                                                {% endif %}
+                                            {% endblock %}
+                                        </ol>
+                                    </nav>
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="app-main__body flex-grow-1">
+                    <div class="container">
+                        {% block content %}
+
+                        {% endblock %}
+                    </div>
+                </div>
+            </main>
+        {% endblock %}
+        {% include 'footer.html' %}
+    </div>
+    <script>
+        {% if messages %}
+            var html = '<p>';
+            {% for message in messages %}
+                html += '{{ message }}<br>';
+            {% endfor %}
+            html += '</p>';
+            Swal.fire({
+                title: 'Error!',
+                html: html,
+                icon: 'error'
+            });
+        {% endif %}
+    </script>
+    </body>
+{% endblock %}

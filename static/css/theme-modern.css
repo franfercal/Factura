@@ -1,0 +1,484 @@
+/**
+ * Tema visual FACTURASAPP: tipografía, componentes y pantallas de auth.
+ * El layout (navbar, sidebar, rejilla) está en app-shell.css.
+ */
+
+:root {
+    /* Paleta base (slate + acento índigo) */
+    --tm-color-bg: #f1f5f9;
+    --tm-color-surface: #ffffff;
+    --tm-color-surface-muted: #f8fafc;
+    --tm-color-border: #e2e8f0;
+    --tm-color-text: #0f172a;
+    --tm-color-text-muted: #64748b;
+    --tm-color-primary: #4f46e5;
+    --tm-color-primary-hover: #4338ca;
+    --tm-color-primary-soft: rgba(79, 70, 229, 0.08);
+    --tm-color-danger: #dc2626;
+    --tm-color-success: #059669;
+    --tm-radius-sm: 8px;
+    --tm-radius-md: 12px;
+    --tm-radius-lg: 16px;
+    --tm-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --tm-shadow-md: 0 4px 24px rgba(15, 23, 42, 0.08);
+    --tm-font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --tm-transition: 0.2s ease;
+}
+
+/* Tipografía global */
+html {
+    font-size: 15px;
+}
+
+body {
+    font-family: var(--tm-font-sans) !important;
+    font-weight: 400;
+    color: var(--tm-color-text);
+    background-color: var(--tm-color-bg) !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.card-title,
+.modal-title,
+.app-dash-metric__label,
+.app-dash-stat__title,
+.app-dash-user-card__title {
+    font-family: var(--tm-font-sans) !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em;
+    color: var(--tm-color-text);
+}
+
+/* Área de trabajo principal */
+.app-main {
+    background-color: var(--tm-color-bg) !important;
+}
+
+.app-main__toolbar {
+    padding-top: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Cabecera: refinado sobre app-shell (bordes / enlaces) */
+.app-header .navbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-light.app-header .navbar,
+.app-header .navbar.navbar-light {
+    border-bottom: 1px solid var(--tm-color-border);
+}
+
+.app-header .navbar-nav .nav-link {
+    font-weight: 500;
+    border-radius: var(--tm-radius-sm);
+    transition: background var(--tm-transition), color var(--tm-transition);
+}
+
+.app-header .navbar-dark .navbar-nav .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.app-header .navbar-light .navbar-nav .nav-link:hover {
+    background: rgba(15, 23, 42, 0.06);
+}
+
+.app-sidebar__brand .brand-text,
+.navbar-brand .brand-text {
+    font-weight: 600 !important;
+    letter-spacing: -0.03em;
+}
+
+.app-sidebar__brand .brand-image,
+.navbar-brand .brand-image {
+    border-radius: 10px;
+    max-height: 34px;
+    object-fit: contain;
+}
+
+/* Tarjetas */
+.card {
+    border: 1px solid var(--tm-color-border) !important;
+    border-radius: var(--tm-radius-md) !important;
+    box-shadow: var(--tm-shadow-sm) !important;
+    overflow: hidden;
+    background: var(--tm-color-surface) !important;
+}
+
+.card-header {
+    background: var(--tm-color-surface-muted) !important;
+    border-bottom: 1px solid var(--tm-color-border) !important;
+    padding: 0.85rem 1.25rem;
+}
+
+.card-header .card-title {
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0;
+    color: var(--tm-color-text);
+}
+
+.card-footer {
+    background: var(--tm-color-surface-muted) !important;
+    border-top: 1px solid var(--tm-color-border) !important;
+}
+
+/* Botones */
+.btn {
+    font-family: var(--tm-font-sans);
+    font-weight: 500;
+    border-radius: var(--tm-radius-sm) !important;
+    padding: 0.45rem 1rem;
+    transition: transform var(--tm-transition), box-shadow var(--tm-transition), background var(--tm-transition);
+}
+
+.btn-primary {
+    background: var(--tm-color-primary) !important;
+    border-color: var(--tm-color-primary) !important;
+    box-shadow: 0 1px 2px rgba(79, 70, 229, 0.25);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--tm-color-primary-hover) !important;
+    border-color: var(--tm-color-primary-hover) !important;
+}
+
+.btn-success {
+    background: var(--tm-color-success) !important;
+    border-color: var(--tm-color-success) !important;
+}
+
+.btn-danger {
+    background: var(--tm-color-danger) !important;
+    border-color: var(--tm-color-danger) !important;
+}
+
+.btn-flat {
+    border-radius: var(--tm-radius-sm) !important;
+}
+
+/* Formularios */
+.form-control {
+    border-radius: var(--tm-radius-sm) !important;
+    border-color: var(--tm-color-border);
+    font-family: var(--tm-font-sans);
+    transition: border-color var(--tm-transition), box-shadow var(--tm-transition);
+}
+
+.form-control:focus {
+    border-color: var(--tm-color-primary);
+    box-shadow: 0 0 0 3px var(--tm-color-primary-soft);
+}
+
+label {
+    font-weight: 500;
+    color: var(--tm-color-text-muted);
+    font-size: 0.875rem;
+}
+
+/* Tablas */
+.table {
+    font-size: 0.92rem;
+}
+
+.table-bordered {
+    border: 1px solid var(--tm-color-border) !important;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border-color: var(--tm-color-border) !important;
+}
+
+.table thead th {
+    font-weight: 600;
+    text-transform: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    color: var(--tm-color-text-muted);
+    background: var(--tm-color-surface-muted) !important;
+}
+
+/* Migas de pan */
+.breadcrumb {
+    background: var(--tm-color-surface) !important;
+    border: 1px solid var(--tm-color-border) !important;
+    border-radius: var(--tm-radius-sm) !important;
+    padding: 0.65rem 1rem !important;
+    box-shadow: var(--tm-shadow-sm);
+}
+
+.breadcrumb a {
+    color: var(--tm-color-primary) !important;
+    font-weight: 500;
+}
+
+/* Métricas en fila (dashboard administrativo) */
+.app-dash-metric {
+    display: flex;
+    align-items: stretch;
+    min-height: 88px;
+    border-radius: var(--tm-radius-md) !important;
+    border: 1px solid var(--tm-color-border);
+    box-shadow: var(--tm-shadow-sm);
+    overflow: hidden;
+    background: var(--tm-color-surface);
+}
+
+.app-dash-metric__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 88px;
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.app-dash-metric__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.65rem 1rem;
+}
+
+.app-dash-metric__label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--tm-color-text-muted);
+    font-weight: 600;
+}
+
+.app-dash-metric__value {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--tm-color-text);
+    line-height: 1.2;
+}
+
+/* Pie */
+.app-footer {
+    color: var(--tm-color-text-muted);
+    font-size: 0.875rem;
+}
+
+.app-footer a {
+    color: var(--tm-color-primary);
+    font-weight: 500;
+}
+
+/* Tarjetas del dashboard (accesos a módulos) */
+a.card-icon {
+    border: 1px solid var(--tm-color-border) !important;
+    border-radius: var(--tm-radius-md) !important;
+    color: var(--tm-color-text) !important;
+    background: var(--tm-color-surface);
+    transition: border-color var(--tm-transition), box-shadow var(--tm-transition), transform var(--tm-transition) !important;
+}
+
+a.card-icon:hover {
+    background: var(--tm-color-surface) !important;
+    border-color: var(--tm-color-primary) !important;
+    box-shadow: var(--tm-shadow-md) !important;
+    transform: translateY(-2px);
+    animation: none !important;
+}
+
+.card-icon-selected {
+    background: var(--tm-color-primary-soft) !important;
+    border-color: var(--tm-color-primary) !important;
+}
+
+/* Pestañas */
+.nav-tabs .nav-link {
+    font-weight: 500;
+    border-radius: var(--tm-radius-sm) var(--tm-radius-sm) 0 0 !important;
+    color: var(--tm-color-text-muted);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--tm-color-primary) !important;
+    font-weight: 600;
+}
+
+/* Dropdowns */
+.dropdown-menu {
+    border: 1px solid var(--tm-color-border);
+    border-radius: var(--tm-radius-sm);
+    box-shadow: var(--tm-shadow-md);
+}
+
+.dropdown-item {
+    font-weight: 450;
+    border-radius: 6px;
+    margin: 2px 6px;
+    width: auto;
+}
+
+.dropdown-item:hover {
+    background: var(--tm-color-primary-soft);
+    color: var(--tm-color-primary);
+}
+
+/* Modales */
+.modal-content {
+    border: none;
+    border-radius: var(--tm-radius-md) !important;
+    box-shadow: var(--tm-shadow-md);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--tm-color-border);
+}
+
+/* Stock bajo (listados) */
+.low-stock {
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+/* SweetAlert2: acorde al tema */
+.swal2-popup {
+    font-family: var(--tm-font-sans) !important;
+    border-radius: var(--tm-radius-md) !important;
+}
+
+.swal2-styled.swal2-confirm {
+    background: var(--tm-color-primary) !important;
+    border-radius: var(--tm-radius-sm) !important;
+    font-weight: 600 !important;
+}
+
+/* jquery-confirm */
+.jconfirm-box {
+    font-family: var(--tm-font-sans) !important;
+    border-radius: var(--tm-radius-md) !important;
+}
+
+/* DataTables: menos “cuadrícula pesada” */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_paginate {
+    font-family: var(--tm-font-sans);
+    color: var(--tm-color-text-muted);
+}
+
+.page-item.active .page-link {
+    background: var(--tm-color-primary) !important;
+    border-color: var(--tm-color-primary) !important;
+}
+
+/* Utilidad: texto secundario */
+.tm-text-muted {
+    color: var(--tm-color-text-muted) !important;
+}
+
+/* Contenido principal: aire */
+.app-main__body > .container-fluid,
+.app-main__body > .container {
+    padding-top: 0.5rem;
+}
+
+/* Tarjeta de bienvenida (cliente) en dashboard */
+.app-dash-user-card .app-dash-user-card__header {
+    border-radius: var(--tm-radius-md) var(--tm-radius-md) 0 0;
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #4f46e5 100%);
+    color: #fff;
+    padding: 1.35rem 1.25rem;
+}
+
+.app-dash-user-card__title {
+    color: #fff !important;
+    font-size: 1.15rem;
+}
+
+.app-dash-user-card__subtitle {
+    color: rgba(255, 255, 255, 0.92) !important;
+    font-weight: 400 !important;
+    font-size: 0.95rem;
+}
+
+.app-dash-stat {
+    text-align: center;
+    padding: 0.35rem 0;
+}
+
+.app-dash-stat__value {
+    display: block;
+    color: var(--tm-color-text-muted);
+    font-size: 0.9rem;
+}
+
+/* Página de login (fondo + contraste con tarjeta) */
+body.login-page {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #1e1b4b 0%, #312e81 40%, #4f46e5 100%) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.login-page .login-box {
+    width: 100%;
+    max-width: 420px;
+    margin-top: 0 !important;
+}
+
+body.login-page .login-box .card {
+    border: none !important;
+    border-radius: var(--tm-radius-lg) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35) !important;
+    overflow: hidden;
+}
+
+body.login-page .login-card-body {
+    padding: 2rem 2rem 1.75rem !important;
+}
+
+body.login-page .login-box-msg {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--tm-color-text);
+    letter-spacing: -0.02em;
+}
+
+body.login-page .contact-image i {
+    color: var(--tm-color-primary);
+    background: var(--tm-color-primary-soft);
+    border-radius: 50%;
+    padding: 1.25rem !important;
+}
+
+body.login-page .btn-block {
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+    font-weight: 600;
+}
+
+/* Lockscreen (sesión ya iniciada): centrar sobre el mismo fondo que login */
+body.login-page .lockscreen-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.login-page .lockscreen-image img {
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.35);
+}
+
+/* Avatar en barra lateral */
+.app-sidebar__user .rounded-circle {
+    border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.app-sidebar[class*="sidebar-light"] .app-sidebar__user .rounded-circle {
+    border-color: rgba(15, 23, 42, 0.12);
+}

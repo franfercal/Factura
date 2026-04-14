@@ -1,0 +1,76 @@
+/**
+ * Estilos de aplicación (listados, formularios, módulos).
+ * El aspecto global (colores, tipografía, tarjetas) vive en theme-modern.css.
+ */
+
+.breadcrumb a {
+    font-weight: 500;
+}
+
+.card .card-header .card-title,
+.modal .modal-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.table thead tr {
+    color: inherit !important;
+}
+
+.table thead th {
+    border-top-width: 0 !important;
+    border-bottom-width: 1px !important;
+}
+
+.password-progress {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.dataTables_scroll {
+    overflow: auto;
+}
+
+.form-control-checkbox {
+    height: 25px;
+    width: 25px;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+a.card-icon p.desc {
+    text-align: center;
+    font-size: 0.8125rem !important;
+    color: var(--tm-color-text-muted, #64748b);
+}
+
+a.card-icon {
+    text-decoration: none !important;
+}
+
+.card-icon-selected {
+    /* El color exacto viene de theme-modern (--tm-color-primary-soft) */
+    background-color: rgba(79, 70, 229, 0.1) !important;
+}
+
+a.card-icon:hover {
+    animation: none;
+}
+
+@media (min-width: 768px) {
+    .modal-xl {
+        width: 90%;
+        max-width: 1200px;
+    }
+}
+
+.low-stock {
+    /* Detalle en theme-modern; aquí refuerzo legibilidad en tablas */
+    font-weight: 600;
+}

@@ -1,0 +1,65 @@
+/**
+ * Ajustes adicionales de la pantalla de autenticación (login, lockscreen).
+ * El fondo y la tarjeta principal se definen en static/css/theme-modern.css.
+ */
+
+.contact-image {
+    text-align: center;
+}
+
+.lockscreen-wrapper {
+    width: 100%;
+    max-width: 480px;
+    padding: 1.5rem;
+}
+
+.lockscreen-logo a {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.lockscreen-name {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.lockscreen-item {
+    background: rgba(255, 255, 255, 0.98);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.lockscreen-footer,
+.help-block,
+.lockscreen-wrapper .text-center a {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.lockscreen-wrapper .text-center a:hover {
+    color: #fff;
+}
+
+.contact-image i {
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .login-box,
+    .register-box {
+        width: 90%;
+        max-width: 420px;
+    }
+}
+
+.login-box p.desc {
+    font-size: 0.875rem;
+    color: var(--tm-color-text-muted, #64748b);
+}
+
+.login-box p.desc a {
+    font-weight: 600;
+}
