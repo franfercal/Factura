@@ -10,29 +10,22 @@
     <script src="{% static 'lib/bootstrap-daterangepicker-3.1/js/spanish.js' %}"></script>
     <script src="{% static 'lib/bootstrap-daterangepicker-3.1/js/daterangepicker.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/bootstrap-daterangepicker-3.1/css/daterangepicker.css' %}"/>
-    <!--Block head report-->
     {% block head_report %}{% endblock %}
 {% endblock %}
 
 {% block content %}
-    <div class="card {{ dashboard.card }}">
-        <div class="card-header">
-            <h3 class="card-title">
-                <i class="fas fa-chart-bar"></i>
-                {{ title }}
-            </h3>
-        </div>
-        <div class="card-body">
-            <div class="container-fluid">
-                <!--Block content report-->
-                {% block content_report %}
-
-                {% endblock %}
-            </div>
+<div class="fb-card {{ dashboard.card }}">
+    <div class="fb-card__header card-header flex items-center gap-2">
+        <h5 class="card-title mb-0 flex items-center gap-2">
+            <i class="fas fa-chart-bar text-indigo-500"></i>
+            <span>{{ title }}</span>
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            {% block content_report %}{% endblock %}
         </div>
     </div>
-    <!--Block report_javascript-->
-    {% block javascript_report %}
-
-    {% endblock %}
+</div>
+{% block javascript_report %}{% endblock %}
 {% endblock %}

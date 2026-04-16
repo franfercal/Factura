@@ -2,27 +2,38 @@
 {% load static %}
 
 {% block content %}
-    <div class="lockscreen-wrapper">
-        <div class="lockscreen-logo">
-            <a><i class="{{ dashboard.get_icon }} fa-3x"></i></a>
+<div class="fb-login-wrapper">
+    <div class="fb-login-box text-center">
+
+        <!-- Icono de la empresa -->
+        <div class="fb-login-icon mb-4">
+            <i class="{{ dashboard.get_icon }} fa-2x" style="color: #fff;"></i>
         </div>
-        <div class="lockscreen-name text-center">{{ request.user.get_short_name }}</div>
-        <div class="lockscreen-item" style="width: auto;">
-            <div class="lockscreen-image">
-                <img src="{{ request.user.get_image }}" alt="User Image">
-            </div>
-            <a href="{% url 'dashboard' %}" class="btn btn-primary btn-block">
-                <i class="fas fa-home"></i> Continuar con la sesión activa
-            </a>
-        </div>
-        <div class="help-block text-center">
-            {{ request.user.username }} continua con la sesión activa
-        </div>
-        <div class="text-center">
+
+        <!-- Avatar del usuario -->
+        <img src="{{ request.user.get_image }}"
+             alt="{{ request.user.get_short_name }}"
+             class="rounded-full w-20 h-20 object-cover mx-auto mb-3 border-4"
+             style="border-color: rgba(255,255,255,0.2);">
+
+        <h2 class="text-xl font-semibold mb-1" style="color: var(--fb-color-text);">
+            {{ request.user.get_short_name }}
+        </h2>
+        <p class="login-box-msg mb-4">
+            <span class="font-medium">{{ request.user.username }}</span> continúa con la sesión activa
+        </p>
+
+        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-block mb-3">
+            <i class="fas fa-home me-1"></i> Continuar con la sesión activa
+        </a>
+
+        <p class="login-box p desc">
             <a href="{% url 'login_different' %}">O inicia sesión como un usuario diferente</a>
-        </div>
-        <div class="lockscreen-footer text-center">
+        </p>
+
+        <p class="login-box p desc mt-3" style="font-size:0.8rem; color:#9ca3af;">
             © {{ dashboard.name }} — Todos los derechos reservados
-        </div>
+        </p>
     </div>
+</div>
 {% endblock %}

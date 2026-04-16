@@ -5,64 +5,68 @@
 {% endblock %}
 
 {% block content %}
-    <div class="login-box">
-        <div class="login-box-body">
-            <div class="card">
-                <div class="card-body login-card-body">
-                    <div class="contact-image">
-                        <i class="{{ dashboard.get_icon }} fa-5x"></i>
-                    </div>
-                    <p class="login-box-msg">Inicio de Sesión</p>
-                    <form method="post" id="frmForm" autocomplete="off">
-                        {% csrf_token %}
-                        <input type="hidden" name="next" value="{{ next }}">
-                        <div class="form-group">
-                            <label>{{ form.username.label }}:</label>
-                            {{ form.username }}
-                        </div>
-                        <div class="form-group">
-                            <label>{{ form.password.label }}:</label>
-                            <div class="input-group my-group">
-                                {{ form.password }}
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary btnShowPassword btn-flat" type="button">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <button type="submit" class="btn btn-primary btn-block btn-flat">
-                                    <i class="fas fa-sign-in-alt"></i> Ingresar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    <p class="mt-3 text-center desc">
-                        Si has olvidado tu contraseña <a href="{% url 'reset_password' %}">da click aqui <i
-                            class="fas fa-key"></i></a>
-                    </p>
-                </div>
+<div class="fb-login-wrapper">
+    <div class="fb-login-box">
+        <!-- Icono central -->
+        <div class="contact-image text-center mb-4">
+            <div class="fb-login-icon">
+                <i class="{{ dashboard.get_icon }} fa-3x"></i>
             </div>
         </div>
+
+        <h2 class="text-center font-bold text-gray-800 text-xl mb-1">{{ dashboard.name }}</h2>
+        <p class="text-center text-gray-400 text-sm mb-5 login-box-msg">Inicio de Sesión</p>
+
+        <form method="post" id="frmForm" autocomplete="off">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <div class="form-group mb-4">
+                <label class="fb-label">{{ form.username.label }}</label>
+                <div class="fb-input-wrapper">
+                    <span class="fb-input-icon"><i class="fas fa-user"></i></span>
+                    {{ form.username }}
+                </div>
+            </div>
+
+            <div class="form-group mb-5">
+                <label class="fb-label">{{ form.password.label }}</label>
+                <div class="input-group my-group fb-input-wrapper-group">
+                    {{ form.password }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btnShowPassword" type="button">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block w-full py-2.5 font-semibold">
+                <i class="fas fa-sign-in-alt mr-2"></i> Ingresar
+            </button>
+        </form>
+
+        <p class="text-center text-sm mt-4 text-gray-400 login-box-msg desc">
+            ¿Olvidaste tu contraseña?
+            <a href="{% url 'reset_password' %}" class="text-indigo-600 font-medium hover:underline">
+                Click aquí <i class="fas fa-key"></i>
+            </a>
+        </p>
     </div>
-    <script type="application/javascript">
-        var errors = "";
-        {% if form.errors %}
-            {% for field in form %}
-                {% for error in field.errors %}
-                    errors += "{{ error }}\n";
-                {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
+</div>
+
+<script type="application/javascript">
+    var errors = "";
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
                 errors += "{{ error }}\n";
             {% endfor %}
-            Swal.fire({
-                icon: 'error',
-                title: 'Notificación',
-                text: errors,
-            });
-        {% endif %}
-    </script>
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            errors += "{{ error }}\n";
+        {% endfor %}
+        Swal.fire({ icon: 'error', title: 'Notificación', text: errors });
+    {% endif %}
+</script>
 {% endblock %}

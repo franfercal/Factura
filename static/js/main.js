@@ -1,23 +1,14 @@
 /**
- * Interacción global del layout (menú lateral, pestañas del dashboard horizontal,
+ * Interacción global del layout Flowbite Dashboard (menú lateral, submenús,
  * persistencia en localStorage). Depende de jQuery y Bootstrap 4 (pestañas).
  */
 var pathname = window.location.pathname;
-/** Cuerpo del documento: clase de barra lateral colapsada y contenedor del menú. */
 var cuerpoDocumento = $('body');
 
-/**
- * Muestra el ul del subárbol lateral. jQuery.show() usa display:block y rompe la clase .nav (flex) de Bootstrap 4.
- * @param {jQuery} nodoListaSubmenu - ul.app-nav-submenu
- */
 function mostrarListaSubmenuLateral(nodoListaSubmenu) {
     nodoListaSubmenu.css('display', 'flex');
 }
 
-/**
- * Oculta el ul del subárbol lateral.
- * @param {jQuery} nodoListaSubmenu - ul.app-nav-submenu
- */
 function ocultarListaSubmenuLateral(nodoListaSubmenu) {
     nodoListaSubmenu.hide();
 }
@@ -25,9 +16,7 @@ function ocultarListaSubmenuLateral(nodoListaSubmenu) {
 var page = {
     components: {
         vertical: {
-            /** Clase que se aplica a body cuando la barra lateral está plegada. */
             claseBarraColapsada: 'app-sidebar--collapsed',
-            /** Clave en localStorage para recordar el estado del plegado. */
             claveBarraColapsada: 'factura_sidebar_colapsado',
             module_header: 'module_header',
             submodule: 'submodule',
@@ -38,16 +27,16 @@ var page = {
             single_module: 'single_module'
         }
     },
-    /**
-     * Restaura estado visual desde localStorage (plegado del sidebar, módulo abierto, pestaña activa).
-     */
     initial: function () {
         var elemento = null;
         var colapso = this.components.vertical;
-        // Layout vertical
+
+        // Sidebar colapsado en desktop
         if (localStorage.getItem(colapso.claveBarraColapsada)) {
             cuerpoDocumento.addClass(colapso.claseBarraColapsada);
         }
+
+        // Restaurar módulo abierto en sidebar
         if (localStorage.getItem(colapso.module_header)) {
             elemento = cuerpoDocumento.find('li.nav-item[data-name="module_header"][data-id="' + localStorage.getItem(colapso.module_header) + '"]');
             if (elemento.length) {
@@ -58,6 +47,8 @@ var page = {
                 localStorage.removeItem(colapso.module_header);
             }
         }
+
+        // Restaurar submodulo activo
         if (localStorage.getItem(colapso.submodule)) {
             elemento = cuerpoDocumento.find('li.nav-item .app-nav-submenu a.nav-link[data-name="submodule"][data-id="' + localStorage.getItem(colapso.submodule) + '"]');
             if (elemento.length) {
@@ -66,6 +57,8 @@ var page = {
                 localStorage.removeItem(colapso.submodule);
             }
         }
+
+        // Restaurar módulo individual activo
         if (localStorage.getItem(colapso.single_module)) {
             elemento = cuerpoDocumento.find('li.nav-item a.nav-link[data-name="single_module"][data-id="' + localStorage.getItem(colapso.single_module) + '"]');
             if (elemento.length) {
@@ -74,7 +67,8 @@ var page = {
                 localStorage.removeItem(colapso.single_module);
             }
         }
-        // Layout horizontal (dashboard con pestañas)
+
+        // Layout horizontal: restaurar pestaña activa
         if (localStorage.getItem(this.components.horizontal.module_header)) {
             elemento = $('.nav-tabs li.nav-item a[data-name="module_header"][href="' + localStorage.getItem(this.components.horizontal.module_header) + '"]');
             if (elemento.length && typeof elemento.tab === 'function') {
@@ -105,20 +99,34 @@ $(function () {
             load_image(rutaImagen);
         });
 
-    // ---------- Layout vertical (sidebar + cabecera con hamburguesa) ----------
+    // ===== LAYOUT VERTICAL: toggle del sidebar =====
     var colapso = page.components.vertical;
 
-    $('nav .navbar-nav .collapsedMenu').on('click', function (evento) {
+    $(document).on('click', '.collapsedMenu', function (evento) {
         evento.preventDefault();
-        cuerpoDocumento.toggleClass(colapso.claseBarraColapsada);
-        if (cuerpoDocumento.hasClass(colapso.claseBarraColapsada)) {
-            localStorage.setItem(colapso.claveBarraColapsada, '1');
+        if ($(window).width() < 640) {
+            // Móvil: toggle app-sidebar--open + backdrop
+            var abierto = cuerpoDocumento.hasClass('app-sidebar--open');
+            cuerpoDocumento.toggleClass('app-sidebar--open', !abierto);
+            $('#sidebarBackdrop').toggleClass('hidden', abierto);
         } else {
-            localStorage.removeItem(colapso.claveBarraColapsada);
+            // Desktop: toggle app-sidebar--collapsed + persistir
+            cuerpoDocumento.toggleClass(colapso.claseBarraColapsada);
+            if (cuerpoDocumento.hasClass(colapso.claseBarraColapsada)) {
+                localStorage.setItem(colapso.claveBarraColapsada, '1');
+            } else {
+                localStorage.removeItem(colapso.claveBarraColapsada);
+            }
         }
     });
 
-    // Delegación en ul.app-nav-menu: evita dobles clics por li anidados.
+    // Cerrar sidebar al pulsar el backdrop (móvil)
+    $('#sidebarBackdrop').on('click', function () {
+        cuerpoDocumento.removeClass('app-sidebar--open');
+        $(this).addClass('hidden');
+    });
+
+    // ===== NAVEGACIÓN DEL SIDEBAR =====
     var contenedorMenuLateral = $('.sidebar .app-nav-menu');
     if (contenedorMenuLateral.length) {
         contenedorMenuLateral
@@ -167,8 +175,7 @@ $(function () {
             });
     }
 
-    // ---------- Layout horizontal (dashboard con pestañas y tarjetas de módulo) ----------
-
+    // ===== LAYOUT HORIZONTAL: pestañas de módulos =====
     $('.nav-tabs li.nav-item a[data-name="module_header"]').on('click', function () {
         var destinoPestaña = $(this).attr('href');
         localStorage.setItem(page.components.horizontal.module_header, destinoPestaña);
@@ -183,15 +190,17 @@ $(function () {
             localStorage.setItem(page.components.horizontal.single_module, $(this).data('id'));
         });
 
+    // Logout: limpiar localStorage
     $('.btnLogout').on('click', function () {
         localStorage.clear();
     });
 
-    // ---------- Cabecera horizontal: submenús dentro de "Módulos" (Bootstrap 4 + anidación) ----------
-    $('header.app-header').on('click', '.dropdown-submenu .dropdown-menu', function (evento) {
+    // ===== LAYOUT HORIZONTAL: submenús anidados en navbar =====
+    $('header.fb-header').on('click', '.dropdown-submenu .dropdown-menu', function (evento) {
         evento.stopPropagation();
     });
-    $('header.app-header').on('click', '.dropdown-submenu > .js-submenu-tipo-modulo', function (evento) {
+
+    $('header.fb-header').on('click', '.dropdown-submenu > .js-submenu-tipo-modulo', function (evento) {
         evento.preventDefault();
         evento.stopPropagation();
         var filaSubmenu = $(this).closest('.dropdown-submenu');

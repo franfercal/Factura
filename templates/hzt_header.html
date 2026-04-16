@@ -1,111 +1,123 @@
 {% load static %}
 {% load security_extras %}
-{# Cabecera layout horizontal: solo Bootstrap 4 + estilos app-shell #}
-<header class="app-header w-100">
-    <nav class="navbar navbar-expand-md {{ dashboard.navbar }}">
-        <div class="container">
-            <a href="{% url 'dashboard' %}" class="navbar-brand {{ dashboard.brand_logo }}">
-                <img src="{{ dashboard.get_image }}" alt="" class="brand-image" style="opacity: .9">
-                <span class="brand-text">{{ dashboard.name }}</span>
+{# Cabecera layout horizontal: navbar expandida con módulos como dropdown #}
+<header class="fb-header {{ dashboard.navbar }}">
+    <nav class="flex items-center justify-between px-4 py-2.5 min-h-[56px]">
+
+        <!-- Izquierda: brand + módulos -->
+        <div class="flex items-center gap-4">
+            <!-- Brand -->
+            <a href="{% url 'dashboard' %}" class="fb-sidebar__brand flex items-center gap-3 no-underline">
+                <img src="{{ dashboard.get_image }}" alt="" class="h-8 w-auto rounded-lg object-contain">
+                <span class="brand-text font-semibold text-base hidden sm:block">{{ dashboard.name }}</span>
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Alternar menú">
-                <span class="navbar-toggler-icon"></span>
+
+            <!-- Hamburguesa en móvil -->
+            <button class="collapsedMenu sm:hidden p-2 rounded-lg hover:bg-white/10 fb-nav-link" type="button" id="collapsedMenu" aria-label="Menú">
+                <i class="fas fa-bars"></i>
             </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">
-                            <i class="fas fa-folder-open"></i> Módulos
-                        </a>
-                        <ul class="dropdown-menu border-0 shadow" style="left: 0; right: inherit;">
-                            {% if request.session.group %}
-                                {# Sin data-toggle en el hijo: Bootstrap 4 cierra el padre; hover + JS en main.js. #}
-                                {% for module_type in request.session.group.id|get_module_types_con_modulos %}
-                                    <li class="dropdown-submenu dropdown-hover">
-                                        <a href="#" role="button" class="dropdown-item dropdown-toggle js-submenu-tipo-modulo" aria-expanded="false">
-                                            <i class="{{ module_type.icon }}"></i> {{ module_type.name }}
-                                        </a>
-                                        <ul class="dropdown-menu border-0 shadow">
-                                            {% for module in module_type.get_modules_vertical %}
-                                                <li><a href="{{ module.url }}" class="dropdown-item"><i class="{{ module.icon }}"></i> {{ module.name }}</a></li>
-                                            {% endfor %}
-                                            {% for module in module_type.get_modules_horizontal %}
-                                                <li><a href="{{ module.url }}" class="dropdown-item"><i class="{{ module.icon }}"></i> {{ module.name }}</a></li>
-                                            {% endfor %}
-                                        </ul>
-                                    </li>
-                                {% endfor %}
-                                {% for module in request.session.group.id|get_module_horizontal %}
-                                    <li><a href="{{ module.url }}" class="dropdown-item"><i class="{{ module.icon }}"></i> {{ module.name }}</a></li>
-                                {% endfor %}
-                            {% endif %}
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ml-md-auto flex-row align-items-center">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
-                            <i class="far fa-user"></i> <span class="d-none d-md-inline">{{ request.user.username }}</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0;">
-                            <span class="dropdown-header">Datos de tu conexión</span>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <p class="text-sm mb-0">Dirección IP</p>
-                                <p class="text-sm text-muted mb-0">{{ request.META.REMOTE_ADDR }}</p>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <p class="text-sm mb-0">Navegador</p>
-                                <p class="text-sm text-muted mb-0">{{ request.user_agent }}</p>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <p class="text-sm mb-0">Perfil actual</p>
-                                <p class="text-sm text-muted mb-0">
-                                    {% if request.user.groups.all and request.session.group %}
-                                        {{ request.session.group.name }}
-                                    {% else %}
-                                        Sin perfil
-                                    {% endif %}
-                                </p>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <p class="text-sm mb-0">Último acceso</p>
-                                <p class="text-sm text-muted mb-0">{{ request.user.last_login }}</p>
-                            </a>
-                        </div>
-                    </li>
-                    {% if request.user.groups.all and request.session.group %}
-                        <li class="nav-item dropdown">
-                            <a class="nav-link" data-toggle="dropdown" href="#">
-                                <i class="fa-solid fa-user-shield"></i>
-                                <span class="d-none d-lg-inline">{{ request.session.group.name }}</span>
-                                {% if request.user.groups.all|length > 1 %}
-                                    <i class="fas fa-caret-down"></i>
-                                {% endif %}
-                            </a>
-                            {% if request.user.groups.all|length > 1 %}
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    {% for group in user.groups.all %}
-                                        {% if group.id != request.session.group.id %}
-                                            <a href="{% url 'user_choose_profile' group.id %}" class="dropdown-item">
-                                                {{ group.name }}
-                                            </a>
-                                        {% endif %}
+
+            <!-- Dropdown módulos en desktop -->
+            <div class="dropdown hidden sm:block">
+                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium fb-nav-link"
+                        data-toggle="dropdown" type="button" aria-expanded="false">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Módulos</span>
+                    <i class="fas fa-chevron-down text-xs ml-1"></i>
+                </button>
+                <ul class="dropdown-menu border-0 fb-dropdown shadow-lg" style="left: 0; right: inherit; min-width: 220px;">
+                    {% if request.session.group %}
+                        {% for module_type in request.session.group.id|get_module_types_con_modulos %}
+                            <li class="dropdown-submenu dropdown-hover">
+                                <a href="#" role="button" class="dropdown-item fb-dropdown-item flex items-center justify-between dropdown-toggle js-submenu-tipo-modulo" aria-expanded="false">
+                                    <span><i class="{{ module_type.icon }} mr-2 text-gray-400"></i>{{ module_type.name }}</span>
+                                    <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+                                </a>
+                                <ul class="dropdown-menu border-0 fb-dropdown shadow-lg" style="min-width: 200px;">
+                                    {% for module in module_type.get_modules_vertical %}
+                                        <li><a href="{{ module.url }}" class="dropdown-item fb-dropdown-item"><i class="{{ module.icon }} mr-2 text-gray-400"></i>{{ module.name }}</a></li>
                                     {% endfor %}
-                                </div>
-                            {% endif %}
-                        </li>
+                                    {% for module in module_type.get_modules_horizontal %}
+                                        <li><a href="{{ module.url }}" class="dropdown-item fb-dropdown-item"><i class="{{ module.icon }} mr-2 text-gray-400"></i>{{ module.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                        {% for module in request.session.group.id|get_module_horizontal %}
+                            <li><a href="{{ module.url }}" class="dropdown-item fb-dropdown-item"><i class="{{ module.icon }} mr-2 text-gray-400"></i>{{ module.name }}</a></li>
+                        {% endfor %}
                     {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link btnLogout" href="{% url 'logout' %}" title="Salir">
-                            <i class="fas fa-power-off"></i>
-                        </a>
-                    </li>
                 </ul>
             </div>
+        </div>
+
+        <!-- Derecha: usuario + perfil + logout -->
+        <div class="flex items-center gap-2">
+
+            <!-- Dropdown usuario -->
+            <div class="dropdown">
+                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium fb-nav-link"
+                        data-toggle="dropdown" type="button" aria-expanded="false">
+                    <i class="far fa-user"></i>
+                    <span class="hidden md:inline">{{ request.user.username }}</span>
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right fb-dropdown shadow-lg" style="left: inherit; right: 0; min-width: 240px;">
+                    <div class="px-4 py-2 border-b border-gray-100">
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-0">Datos de conexión</p>
+                    </div>
+                    <a href="#" class="dropdown-item fb-dropdown-item">
+                        <p class="text-xs text-gray-500 mb-0">Dirección IP</p>
+                        <p class="text-sm font-medium text-gray-800 mb-0">{{ request.META.REMOTE_ADDR }}</p>
+                    </a>
+                    <a href="#" class="dropdown-item fb-dropdown-item">
+                        <p class="text-xs text-gray-500 mb-0">Navegador</p>
+                        <p class="text-sm font-medium text-gray-800 mb-0 truncate" style="max-width:200px;">{{ request.user_agent }}</p>
+                    </a>
+                    <a href="#" class="dropdown-item fb-dropdown-item">
+                        <p class="text-xs text-gray-500 mb-0">Perfil actual</p>
+                        <p class="text-sm font-medium text-gray-800 mb-0">
+                            {% if request.user.groups.all and request.session.group %}
+                                {{ request.session.group.name }}
+                            {% else %}Sin perfil{% endif %}
+                        </p>
+                    </a>
+                    <a href="#" class="dropdown-item fb-dropdown-item">
+                        <p class="text-xs text-gray-500 mb-0">Último acceso</p>
+                        <p class="text-sm font-medium text-gray-800 mb-0">{{ request.user.last_login }}</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dropdown perfil/grupo -->
+            {% if request.user.groups.all and request.session.group %}
+            <div class="dropdown">
+                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium fb-nav-link"
+                        data-toggle="dropdown" type="button">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span class="hidden lg:inline">{{ request.session.group.name }}</span>
+                    {% if request.user.groups.all|length > 1 %}<i class="fas fa-chevron-down text-xs"></i>{% endif %}
+                </button>
+                {% if request.user.groups.all|length > 1 %}
+                <div class="dropdown-menu dropdown-menu-right fb-dropdown shadow-lg" style="left: inherit; right: 0;">
+                    {% for group in user.groups.all %}
+                        {% if group.id != request.session.group.id %}
+                            <a href="{% url 'user_choose_profile' group.id %}" class="dropdown-item fb-dropdown-item">
+                                <i class="fas fa-user-circle mr-2 text-gray-400"></i>{{ group.name }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Logout -->
+            <a class="btnLogout flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium fb-nav-link"
+               href="{% url 'logout' %}" title="Cerrar sesión">
+                <i class="fas fa-power-off"></i>
+                <span class="hidden md:inline">Salir</span>
+            </a>
         </div>
     </nav>
 </header>

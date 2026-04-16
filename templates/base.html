@@ -8,26 +8,37 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <link rel="shortcut icon" href="{{ dashboard.get_image }}"/>
-    <!-- Tipografía: Plus Jakarta Sans (Google Fonts) -->
+    <!-- Tipografía: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <!--CSS-->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 4 (grid, forms, DataTables, FormValidation) -->
     <link rel="stylesheet" href="{% static 'lib/bootstrap-4.6.0/css/bootstrap.min.css' %}"/>
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="{% static 'lib/fontawesome-6.1.1/css/all.min.css' %}"/>
+    <!-- jQuery UI -->
     <link rel="stylesheet" href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.css' %}"/>
-    <!--Javascript-->
+    <!-- Flowbite Dashboard CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+    <!-- App shell: colores de sidebar, navbar, cards del Dashboard model -->
+    <link rel="stylesheet" href="{% static 'css/app-shell.css' %}"/>
+    <!-- Tema visual FACTURASAPP -->
+    <link rel="stylesheet" href="{% static 'css/theme-modern.css' %}"/>
+    <!-- Estilos de negocio -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <!-- jQuery + Bootstrap JS (antes de Tailwind para evitar conflictos) -->
     <script src="{% static 'lib/bootstrap-4.6.0/js/jquery.min.js' %}"></script>
     <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
     <script src="{% static 'lib/bootstrap-4.6.0/js/popper.min.js' %}"></script>
     <script src="{% static 'lib/bootstrap-4.6.0/js/bootstrap.min.js' %}"></script>
-    <!-- Shell de layout: grid, navbar, sidebar, tarjetas (app-shell.css) -->
-    <link rel="stylesheet" href="{% static 'css/app-shell.css' %}"/>
-    <!-- Tema visual FACTURASAPP (variables, componentes, login) -->
-    <link rel="stylesheet" href="{% static 'css/theme-modern.css' %}"/>
-    <!-- Estilos de negocio (DataTables, tarjetas módulo, etc.) -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
-    <!--Libs-->
+    <!-- Tailwind CDN sin preflight (coexiste con Bootstrap) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: { preflight: false },
+        }
+    </script>
+    <!-- Libs -->
     <script src="{% static 'lib/bootstrap-daterangepicker-3.1/js/moment.min.js' %}"></script>
     <script src="{% static 'lib/bootstrap-daterangepicker-3.1/js/moment-with-locales.js' %}"></script>
     <script src="{% static 'lib/jquery-confirm-3.3.4/js/jquery-confirm.min.js' %}"></script>
@@ -36,13 +47,10 @@
     <link rel="stylesheet" href="{% static 'lib/sweetalert2-11.0.16/css/sweetalert2.min.css' %}"/>
     <script src="{% static 'lib/jquery-loading-overlay-2.1.7/js/loadingoverlay.min.js' %}"></script>
     <script src="{% static 'js/functions.js' %}"></script>
-    <!--Block head-->
     {% block head %}{% endblock %}
 </head>
-<!--Block body-->
-{% block body %}
-
-{% endblock %}
-<!--Javascript-->
+{% block body %}{% endblock %}
+<!-- Flowbite JS (componentes: dropdowns, collapses, etc.) -->
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
 <script src="{% static 'js/main.js' %}"></script>
 </html>

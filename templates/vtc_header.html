@@ -1,38 +1,45 @@
 {% load static %}
-{# Barra superior en layout vertical: menú hamburguesa + enlaces de usuario #}
-<header class="app-header w-100">
-    <nav class="navbar navbar-expand {{ dashboard.navbar }} px-2">
-        <ul class="navbar-nav flex-row align-items-center">
-            <li class="nav-item mr-2">
-                <a class="nav-link cursor-pointer collapsedMenu" id="collapsedMenu" href="#" title="Mostrar u ocultar menú lateral" aria-label="Menú lateral">
-                    <i class="fas fa-bars"></i>
-                </a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="{% url 'dashboard' %}" class="nav-link">Inicio</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav ml-auto flex-row align-items-center">
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <i class="far fa-user"></i> <span class="d-none d-md-inline">{{ request.user.username }}</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0;">
-                    <span class="dropdown-header">Datos de tu conexión</span>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <p class="text-sm mb-0">Dirección IP</p>
-                        <p class="text-sm text-muted mb-0">{{ request.META.REMOTE_ADDR }}</p>
+{# Barra superior layout vertical: hamburguesa + usuario + perfil #}
+<header class="fb-header sticky top-0 z-30 w-full {{ dashboard.navbar }}">
+    <nav class="flex items-center justify-between px-4 py-2.5 min-h-[52px]">
+
+        <!-- Izquierda: hamburguesa + inicio -->
+        <div class="flex items-center gap-3">
+            <button class="collapsedMenu p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                    id="collapsedMenu" type="button" title="Mostrar/ocultar menú" aria-label="Menú lateral">
+                <i class="fas fa-bars text-lg"></i>
+            </button>
+            <a href="{% url 'dashboard' %}" class="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium hover:opacity-80 transition-opacity no-underline fb-nav-link">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+        </div>
+
+        <!-- Derecha: usuario + perfil + logout -->
+        <div class="flex items-center gap-2">
+
+            <!-- Dropdown usuario -->
+            <div class="dropdown">
+                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium fb-nav-link"
+                        data-toggle="dropdown" type="button" aria-expanded="false">
+                    <i class="far fa-user"></i>
+                    <span class="hidden md:inline">{{ request.user.username }}</span>
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right fb-dropdown shadow-lg" style="left: inherit; right: 0; min-width: 240px;">
+                    <div class="px-4 py-2 border-b border-gray-100">
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Datos de conexión</p>
+                    </div>
+                    <a href="#" class="dropdown-item fb-dropdown-item">
+                        <p class="text-xs text-gray-500 mb-0">Dirección IP</p>
+                        <p class="text-sm font-medium text-gray-800 mb-0">{{ request.META.REMOTE_ADDR }}</p>
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <p class="text-sm mb-0">Navegador</p>
-                        <p class="text-sm text-muted mb-0">{{ request.user_agent }}</p>
+                    <a href="#" class="dropdown-item fb-dropdown-item">
+                        <p class="text-xs text-gray-500 mb-0">Navegador</p>
+                        <p class="text-sm font-medium text-gray-800 mb-0 truncate" style="max-width:200px;">{{ request.user_agent }}</p>
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <p class="text-sm mb-0">Perfil actual</p>
-                        <p class="text-sm text-muted mb-0">
+                    <a href="#" class="dropdown-item fb-dropdown-item">
+                        <p class="text-xs text-gray-500 mb-0">Perfil actual</p>
+                        <p class="text-sm font-medium text-gray-800 mb-0">
                             {% if request.user.groups.all and request.session.group %}
                                 {{ request.session.group.name }}
                             {% else %}
@@ -40,40 +47,44 @@
                             {% endif %}
                         </p>
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <p class="text-sm mb-0">Último acceso</p>
-                        <p class="text-sm text-muted mb-0">{{ request.user.last_login }}</p>
+                    <a href="#" class="dropdown-item fb-dropdown-item">
+                        <p class="text-xs text-gray-500 mb-0">Último acceso</p>
+                        <p class="text-sm font-medium text-gray-800 mb-0">{{ request.user.last_login }}</p>
                     </a>
                 </div>
-            </li>
+            </div>
+
+            <!-- Dropdown perfil/grupo -->
             {% if request.user.groups.all and request.session.group %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span class="d-none d-lg-inline">{{ request.session.group.name }}</span>
-                        {% if request.user.groups.all|length > 1 %}
-                            <i class="fas fa-caret-down"></i>
-                        {% endif %}
-                    </a>
+            <div class="dropdown">
+                <button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium fb-nav-link"
+                        data-toggle="dropdown" type="button">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span class="hidden lg:inline">{{ request.session.group.name }}</span>
                     {% if request.user.groups.all|length > 1 %}
-                        <div class="dropdown-menu dropdown-menu-right">
-                            {% for group in user.groups.all %}
-                                {% if group.id != request.session.group.id %}
-                                    <a href="{% url 'user_choose_profile' group.id %}" class="dropdown-item">
-                                        {{ group.name }}
-                                    </a>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                        <i class="fas fa-chevron-down text-xs"></i>
                     {% endif %}
-                </li>
+                </button>
+                {% if request.user.groups.all|length > 1 %}
+                <div class="dropdown-menu dropdown-menu-right fb-dropdown shadow-lg" style="left: inherit; right: 0;">
+                    {% for group in user.groups.all %}
+                        {% if group.id != request.session.group.id %}
+                            <a href="{% url 'user_choose_profile' group.id %}" class="dropdown-item fb-dropdown-item">
+                                <i class="fas fa-user-circle mr-2 text-gray-400"></i>{{ group.name }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
             {% endif %}
-            <li class="nav-item">
-                <a class="nav-link btnLogout" href="{% url 'logout' %}" title="Salir">
-                    <i class="fas fa-power-off"></i>
-                </a>
-            </li>
-        </ul>
+
+            <!-- Logout -->
+            <a class="btnLogout flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium fb-nav-link"
+               href="{% url 'logout' %}" title="Cerrar sesión">
+                <i class="fas fa-power-off"></i>
+                <span class="hidden md:inline">Salir</span>
+            </a>
+        </div>
     </nav>
 </header>

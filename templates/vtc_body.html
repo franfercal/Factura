@@ -1,70 +1,66 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-    <!--Block head of body-->
     {% block head_body %}{% endblock %}
 {% endblock %}
 
 {% block body %}
-    {# Layout vertical: sidebar + columna; section_content permite sustituir el <main> (p. ej. dashboards). #}
-    {# sidebar-mini se conserva por compatibilidad con datos antiguos; el colapso lo controla main.js + app-shell.css #}
-    <body class="app-layout app-layout--vertical d-flex flex-column min-vh-100">
-    <div class="d-flex flex-grow-1 w-100" style="min-height: 0;">
-        {% include 'vtc_sidebar.html' %}
-        <div class="app-column d-flex flex-column flex-grow-1 min-vw-0">
-            {% include 'vtc_header.html' %}
-            {% block section_content %}
-                <main class="app-main flex-grow-1 d-flex flex-column" style="min-height: 0;">
-                    <section class="app-main__toolbar">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    {% block breadcrumb %}
-                                        <nav aria-label="breadcrumb">
-                                            <ol class="breadcrumb">
-                                                <li class="breadcrumb-item">
-                                                    <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Panel</a>
-                                                </li>
-                                                {% block breadcrumb_li %}
-                                                    {% if request.session.module %}
-                                                        <li class="breadcrumb-item active" aria-current="page">
-                                                            <a href="{{ request.session.module.url }}"><i class="{{ request.session.module.get_icon }}"></i> {{ request.session.module.name }}
-                                                            </a>
-                                                        </li>
-                                                    {% endif %}
-                                                {% endblock %}
-                                            </ol>
-                                        </nav>
-                                    {% endblock %}
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                    <div class="app-main__body flex-grow-1">
-                        <div class="container-fluid">
-                            {% block content %}
+<body class="fb-body" id="appBody">
 
-                            {% endblock %}
-                        </div>
-                    </div>
-                </main>
+<!-- Backdrop para móvil -->
+<div id="sidebarBackdrop" class="fixed inset-0 z-30 bg-gray-900/60 hidden sm:hidden"></div>
+
+<!-- Sidebar lateral fijo -->
+{% include 'vtc_sidebar.html' %}
+
+<!-- Columna principal (con margen izquierdo = ancho del sidebar) -->
+<div class="flex flex-col min-h-screen" id="appColumn">
+
+    {% include 'vtc_header.html' %}
+
+    {% block section_content %}
+    <main class="fb-main flex-1 flex flex-col">
+        <!-- Breadcrumb toolbar -->
+        <section class="fb-toolbar px-4 pt-4 pb-2">
+            {% block breadcrumb %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb fb-breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Panel</a>
+                    </li>
+                    {% block breadcrumb_li %}
+                        {% if request.session.module %}
+                            <li class="breadcrumb-item active" aria-current="page">
+                                <a href="{{ request.session.module.url }}">
+                                    <i class="{{ request.session.module.get_icon }}"></i> {{ request.session.module.name }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endblock %}
+                </ol>
+            </nav>
             {% endblock %}
-            {% include 'footer.html' %}
+        </section>
+
+        <!-- Contenido de página -->
+        <div class="fb-content flex-1 px-4 pb-6">
+            {% block content %}{% endblock %}
         </div>
-    </div>
-    <script>
-        {% if messages %}
-            var html = '<p>';
-            {% for message in messages %}
-                html += '{{ message }}<br>';
-            {% endfor %}
-            html += '</p>';
-            Swal.fire({
-                title: 'Error!',
-                html: html,
-                icon: 'error'
-            });
-        {% endif %}
-    </script>
-    </body>
+    </main>
+    {% endblock %}
+
+    {% include 'footer.html' %}
+</div>
+
+<script>
+    {% if messages %}
+        var html = '<p>';
+        {% for message in messages %}
+            html += '{{ message }}<br>';
+        {% endfor %}
+        html += '</p>';
+        Swal.fire({ title: 'Error!', html: html, icon: 'error' });
+    {% endif %}
+</script>
+</body>
 {% endblock %}

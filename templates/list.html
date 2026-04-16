@@ -7,85 +7,74 @@
     <script src="{% static 'lib/datatables-1.10.25/js/dataTables.bootstrap4.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/js/dataTables.responsive.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/js/responsive.bootstrap4.min.js' %}"></script>
-    <!--Block head list-->
     {% block head_list %}{% endblock %}
 {% endblock %}
 
 {% block content %}
-    <div class="card {{ dashboard.card }}">
-        <div class="card-header">
-            <h3 class="card-title">
-                <i class="fas fa-search"></i>
-                {{ title }}
-            </h3>
-        </div>
-        <div class="card-body" style="display: block;">
-            <div class="container-fluid">
-                <!--Block content list-->
-                {% block content_list %}
-                    <!--Block content list before-->
-                    {% block content_list_before %}
-                        <br>
-                    {% endblock %}
-                    <!--Table-->
-                    <table style="width:100%;" class="table table-bordered" id="data">
+<div class="fb-card {{ dashboard.card }}">
+    <div class="fb-card__header card-header flex items-center justify-between">
+        <h5 class="card-title mb-0 flex items-center gap-2">
+            <i class="fas fa-search text-indigo-500"></i>
+            <span>{{ title }}</span>
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            {% block content_list %}
+                {% block content_list_before %}<div class="mb-3"></div>{% endblock %}
+                <div class="table-responsive">
+                    <table style="width:100%;" class="table table-bordered fb-table" id="data">
                         <thead>
                         <tr>
-                            <!--Columns-->
                             {% block columns %}{% endblock %}
                         </tr>
                         </thead>
                         <tbody>
-                        <!--Rows-->
                         {% block rows %}{% endblock %}
                         </tbody>
                     </table>
-                {% endblock %}
-            </div>
+                </div>
+            {% endblock %}
         </div>
-        <!--Block box footer-->
-        {% block box_footer %}
-            <div class="card-footer">
-                <!--Block box footer buttons-->
-                {% block box_footer_buttons %}
-                    {% if create_url %}
-                        <a href="{{ create_url }}" class="btn btn-primary btn-flat">
-                            <i class="fas fa-plus"></i> Nuevo Registro
-                        </a>
-                    {% endif %}
-                    <!--Block box footer add buttons-->
-                    {% block box_footer_add_button %}{% endblock %}
-                    <a href="{{ list_url }}" class="btn btn-success btn-flat">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </a>
-                {% endblock %}
-            </div>
-        {% endblock %}
-        <!--Block box footer after-->
-        {% block box_footer_after %}{% endblock %}
     </div>
-    {% block javascript_list %}
-        <script type="application/javascript">
-            var table;
-            $(function () {
-                table = $('#data').DataTable({
-                    autoWidth: false,
-                    destroy: true,
-                    initComplete: function (settings, json) {
-                        // Cierre correcto del div: el typo <div/> rompía el DOM y DataTables.
-                        $(this).wrap('<div class="dataTables_scroll"></div>');
-                    }
-                });
-
-                $('.table')
-                    .on('draw.dt', function () {
-                        $('[data-toggle="tooltip"]').tooltip();
-                    })
-                    .on('click', 'img', function () {
-                        var src = $(this).attr('src');
-                        load_image(src);
-                    });
-            });
-        </script>
+    {% block box_footer %}
+    <div class="fb-card__footer card-footer flex items-center gap-2">
+        {% block box_footer_buttons %}
+            {% if create_url %}
+                <a href="{{ create_url }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus mr-1"></i> Nuevo Registro
+                </a>
+            {% endif %}
+            {% block box_footer_add_button %}{% endblock %}
+            <a href="{{ list_url }}" class="btn btn-success btn-sm">
+                <i class="fas fa-sync-alt mr-1"></i> Actualizar
+            </a>
+        {% endblock %}
+    </div>
     {% endblock %}
+    {% block box_footer_after %}{% endblock %}
+</div>
+{% block javascript_list %}
+    <script type="application/javascript">
+        var table;
+        $(function () {
+            table = $('#data').DataTable({
+                autoWidth: false,
+                destroy: true,
+                initComplete: function (settings, json) {
+                    $(this).wrap('<div class="dataTables_scroll"></div>');
+                }
+            });
+
+            $('.table')
+                .on('draw.dt', function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                })
+                .on('click', 'img', function () {
+                    var src = $(this).attr('src');
+                    load_image(src);
+                });
+        });
+    </script>
+{% endblock %}
 {% endblock %}

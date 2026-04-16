@@ -1,85 +1,86 @@
 {% extends 'skin.html' %}
 {% load static %}
 {% block content %}
-    <form class="form" method="post" action="." autocomplete="off">
-        <div class="card {{ dashboard.card }}">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-info-circle"></i>
-                    {{ title }}
-                </h3>
-            </div>
-            <div class="card-body" style="display: block;">
-                <div class="container-fluid">
-                    {% csrf_token %}
-                    <p class="text-center font-weight-bold mt-3">
-                        <i class="fas fa-trash fa-3x"></i><br><br>
-                        ¿Estas seguro de eliminar el registro N° {{ object.id }}?
+<form class="form" method="post" action="." autocomplete="off">
+    <div class="fb-card {{ dashboard.card }}">
+        <div class="fb-card__header card-header flex items-center gap-2">
+            <h5 class="card-title mb-0 flex items-center gap-2">
+                <i class="fas fa-info-circle text-indigo-500"></i>
+                <span>{{ title }}</span>
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="container-fluid">
+                {% csrf_token %}
+                <div class="text-center py-4">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
+                        <i class="fas fa-trash text-red-500 text-2xl"></i>
+                    </div>
+                    <p class="text-gray-700 font-medium text-base mb-0">
+                        ¿Estás seguro de eliminar el registro N° <strong>{{ object.id }}</strong>?
                     </p>
+                    <p class="text-gray-400 text-sm mt-1">Esta acción no se puede deshacer.</p>
                 </div>
             </div>
-            <div class="card-footer">
-                {% block buttons %}
-                    <button type="submit" class="btn btn-primary btn-flat">
-                        <i class="fas fa-check-circle"></i> Si, Aceptar
-                    </button>
-                    <a href="{{ list_url }}" class="btn btn-danger btn-flat">
-                        <i class="fas fa-times"></i> Cancelar
-                    </a>
-                {% endblock %}
-            </div>
         </div>
-    </form>
-    <script type="application/javascript">
-        $(function () {
-            $('form').on('submit', function (event) {
-                event.preventDefault();
-                $.confirm({
-                    title: 'Alerta',
-                    theme: 'material',
-                    icon: 'fas fa-trash',
-                    content: '¿Estas seguro de eliminar el registro?',
-                    columnClass: 'small',
-                    typeAnimated: true,
-                    cancelButtonClass: "btn-primary",
-                    draggable: true,
-                    dragWindowBorder: false,
-                    buttons: {
-                        info: {
-                            text: "Si",
-                            btnClass: 'btn-primary',
-                            action: function () {
-                                $.ajax({
-                                    url: pathname,
-                                    data: {},
-                                    method: 'POST',
-                                    dataType: 'json',
-                                    headers: {
-                                        'X-CSRFToken': csrftoken
-                                    },
-                                    success: function (request) {
-                                        if (!request.hasOwnProperty('error')) {
-                                            location.href = '{{ list_url }}';
-                                            return false;
-                                        }
-                                        message_error(request.error);
-                                    },
-                                    error: function (jqXHR, textStatus, errorThrown) {
-                                        message_error(errorThrown + ' ' + textStatus);
+        <div class="fb-card__footer card-footer flex items-center justify-center gap-3">
+            {% block buttons %}
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-check-circle mr-1"></i> Sí, Eliminar
+                </button>
+                <a href="{{ list_url }}" class="btn btn-danger btn-sm">
+                    <i class="fas fa-times mr-1"></i> Cancelar
+                </a>
+            {% endblock %}
+        </div>
+    </div>
+</form>
+<script type="application/javascript">
+    $(function () {
+        $('form').on('submit', function (event) {
+            event.preventDefault();
+            $.confirm({
+                title: 'Alerta',
+                theme: 'material',
+                icon: 'fas fa-trash',
+                content: '¿Estás seguro de eliminar el registro?',
+                columnClass: 'small',
+                typeAnimated: true,
+                cancelButtonClass: "btn-primary",
+                draggable: true,
+                dragWindowBorder: false,
+                buttons: {
+                    info: {
+                        text: "Sí",
+                        btnClass: 'btn-primary',
+                        action: function () {
+                            $.ajax({
+                                url: pathname,
+                                data: {},
+                                method: 'POST',
+                                dataType: 'json',
+                                headers: { 'X-CSRFToken': csrftoken },
+                                success: function (request) {
+                                    if (!request.hasOwnProperty('error')) {
+                                        location.href = '{{ list_url }}';
+                                        return false;
                                     }
-                                });
-                            }
-                        },
-                        danger: {
-                            text: "No",
-                            btnClass: 'btn-red',
-                            action: function () {
-
-                            }
-                        },
-                    }
-                });
+                                    message_error(request.error);
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    message_error(errorThrown + ' ' + textStatus);
+                                }
+                            });
+                        }
+                    },
+                    danger: {
+                        text: "No",
+                        btnClass: 'btn-red',
+                        action: function () {}
+                    },
+                }
             });
         });
-    </script>
+    });
+</script>
 {% endblock %}

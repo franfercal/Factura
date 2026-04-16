@@ -1,378 +1,460 @@
 /**
- * Shell de aplicación FACTURASAPP.
- * Layout basado en Bootstrap 4 + flexbox. Las clases navbar-*, sidebar-*, card-*, brand
- * provienen del modelo Dashboard (opciones de tema guardadas en BD).
+ * App Shell — Flowbite Dashboard FACTURASAPP
+ * Layout: sidebar fijo + columna principal. Colores de sidebar, navbar y cards
+ * vienen del modelo Dashboard (opciones guardadas en BD).
  */
 
-/* ---------- Layout horizontal (menú superior) ---------- */
-.app-layout--horizontal {
+/* ===== CUERPO PRINCIPAL ===== */
+.fb-body {
+    background-color: #f9fafb;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
     min-height: 100vh;
+}
+
+.fb-body--horizontal {
     display: flex;
     flex-direction: column;
 }
 
-.app-layout--horizontal .app-main {
-    flex: 1 0 auto;
+/* ===== SIDEBAR ===== */
+.fb-sidebar {
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+    overflow-x: hidden;
+    width: 256px;
+    transition: transform 0.28s ease;
+    z-index: 40;
 }
 
-/* ---------- Layout vertical (sidebar + barra superior) ---------- */
-.app-layout--vertical {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-}
-
-.app-layout--vertical .app-sidebar {
-    width: 260px;
-    flex-shrink: 0;
-    transition: margin 0.25s ease, transform 0.25s ease;
-    z-index: 1030;
-}
-
-@media (max-width: 767.98px) {
-    .app-layout--vertical .app-sidebar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
+/* ─── Desktop (≥ 640 px): sidebar visible por defecto ─── */
+@media (min-width: 640px) {
+    #appSidebar {
         transform: translateX(0);
     }
-
-    body.app-sidebar--collapsed .app-layout--vertical .app-sidebar {
-        transform: translateX(-100%);
+    #appColumn {
+        margin-left: 256px;
+        transition: margin-left 0.28s ease;
     }
-
-    .app-layout--vertical .app-column {
-        width: 100%;
+    /* Hamburguesa: colapsar */
+    body.app-sidebar--collapsed #appSidebar {
+        transform: translateX(-256px);
     }
-}
-
-@media (min-width: 768px) {
-    body.app-sidebar--collapsed .app-layout--vertical .app-sidebar {
-        margin-left: -260px;
+    body.app-sidebar--collapsed #appColumn {
+        margin-left: 0;
     }
 }
 
-.app-layout--vertical .app-column {
-    flex: 1 1 auto;
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
+/* ─── Móvil (< 640 px): sidebar oculto por defecto ─── */
+@media (max-width: 639px) {
+    #appSidebar {
+        transform: translateX(-256px);
+    }
+    #appColumn {
+        margin-left: 0;
+    }
+    /* Hamburguesa: mostrar */
+    body.app-sidebar--open #appSidebar {
+        transform: translateX(0);
+    }
 }
 
-.app-layout--vertical .app-main {
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-/* ---------- Cabecera / navbar ---------- */
-.app-header {
+/* Brand del sidebar */
+.fb-sidebar__brand {
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: opacity 0.15s ease;
     flex-shrink: 0;
 }
 
-.app-header .navbar {
-    min-height: 3.25rem;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
-}
-
-.app-header .navbar-brand {
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.app-header .navbar-brand .brand-image {
-    border-radius: 10px;
-    max-height: 34px;
-    object-fit: contain;
-}
-
-.app-header .navbar-nav .nav-link {
-    font-weight: 500;
-    border-radius: 8px;
-}
-
-/* Colores de navbar (mismas claves que guarda el modelo Dashboard) */
-.navbar-dark.navbar-primary {
-    background: #4f46e5 !important;
-}
-
-.navbar-dark.navbar-secondary {
-    background: #64748b !important;
-}
-
-.navbar-dark.navbar-info {
-    background: #0ea5e9 !important;
-}
-
-.navbar-dark.navbar-success {
-    background: #059669 !important;
-}
-
-.navbar-dark.navbar-danger {
-    background: #dc2626 !important;
-}
-
-.navbar-dark.navbar-indigo {
-    background: #4338ca !important;
-}
-
-.navbar-dark.navbar-purple {
-    background: #7c3aed !important;
-}
-
-.navbar-dark.navbar-pink {
-    background: #db2777 !important;
-}
-
-.navbar-dark.navbar-navy {
-    background: #1e3a5f !important;
-}
-
-.navbar-dark.navbar-lightblue {
-    background: #0284c7 !important;
-}
-
-.navbar-dark.navbar-teal {
-    background: #0d9488 !important;
-}
-
-.navbar-dark.navbar-cyan {
-    background: #0891b2 !important;
-}
-
-.navbar-dark.navbar-dark {
-    background: #0f172a !important;
-}
-
-.navbar-dark.navbar-gray-dark {
-    background: #334155 !important;
-}
-
-.navbar-dark.navbar-gray {
-    background: #475569 !important;
-}
-
-.navbar-light.navbar-light,
-.navbar-light.navbar-white {
-    background: #ffffff !important;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.navbar-light.navbar-warning {
-    background: #fef3c7 !important;
-}
-
-.navbar-light.navbar-orange {
-    background: #ffedd5 !important;
-}
-
-/* ---------- Sidebar ---------- */
-.app-sidebar {
-    display: flex;
-    flex-direction: column;
-    color: #e2e8f0;
-    box-shadow: 4px 0 24px rgba(15, 23, 42, 0.08);
-}
-
-/* Fondos oscuros (variantes principales) */
-.app-sidebar[class*="sidebar-dark"] {
-    background: #1e293b;
-}
-
-.app-sidebar.sidebar-dark-primary {
-    border-right: 3px solid #4f46e5;
-}
-
-.app-sidebar.sidebar-dark-info {
-    border-right: 3px solid #0ea5e9;
-}
-
-.app-sidebar.sidebar-dark-success {
-    border-right: 3px solid #059669;
-}
-
-.app-sidebar.sidebar-dark-warning {
-    border-right: 3px solid #eab308;
-}
-
-.app-sidebar.sidebar-dark-danger {
-    border-right: 3px solid #dc2626;
-}
-
-.app-sidebar[class*="sidebar-light"] {
-    background: #f8fafc;
-    color: #0f172a;
-    border-right: 1px solid #e2e8f0;
-}
-
-.app-sidebar__brand {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.85rem 1rem;
-    color: inherit;
-    text-decoration: none !important;
-    font-weight: 600;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.app-sidebar[class*="sidebar-light"] .app-sidebar__brand {
-    border-bottom-color: #e2e8f0;
-}
-
-.app-sidebar__brand:hover {
-    color: inherit;
-    opacity: 0.92;
-}
-
-.app-sidebar__brand .brand-image {
-    max-height: 36px;
-    border-radius: 8px;
-    object-fit: contain;
-}
-
-.app-sidebar__user {
-    padding: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.app-sidebar[class*="sidebar-light"] .app-sidebar__user {
-    border-bottom-color: #e2e8f0;
-}
-
-.app-sidebar__user .img-circle {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-}
-
-.app-sidebar__user .info a {
-    color: inherit;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-/* Navegación lateral (selectores alineados con static/js/main.js) */
-.app-sidebar .app-nav-menu .app-nav-section-title {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(226, 232, 240, 0.55);
-    padding: 1rem 1rem 0.35rem;
-}
-
-.app-sidebar[class*="sidebar-light"] .app-nav-menu .app-nav-section-title {
-    color: #64748b;
-}
-
-.app-sidebar .app-nav-menu > .nav-item > .nav-link {
-    border-radius: 8px;
-    margin: 2px 0.5rem;
-    color: rgba(255, 255, 255, 0.88);
-}
-
-.app-sidebar[class*="sidebar-light"] .app-nav-menu > .nav-item > .nav-link {
-    color: #334155;
-}
-
-.app-sidebar .app-nav-menu > .nav-item > .nav-link:hover {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.app-sidebar[class*="sidebar-light"] .app-nav-menu > .nav-item > .nav-link:hover {
-    background: #e2e8f0;
-}
-
-.app-sidebar .app-nav-menu > .nav-item.app-nav-branch--open > .nav-link[data-name="module_header"],
-.app-sidebar .app-nav-menu > .nav-item > .nav-link[data-name="module_header"].active {
-    background: rgba(255, 255, 255, 0.12);
+.fb-sidebar__brand:hover {
     color: #fff;
+    opacity: 0.9;
+    text-decoration: none !important;
 }
 
-/* Subárbol: forzar columna aunque lleve la clase .nav de Bootstrap (evita fila horizontal). */
-.app-sidebar .app-nav-submenu {
+.fb-sidebar__brand .brand-text {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+/* Sección de usuario */
+.fb-sidebar__user {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+}
+
+/* Título de sección */
+.app-nav-section-title {
+    color: rgba(255, 255, 255, 0.4);
+    display: block;
+}
+
+/* Ítems de nav principal */
+.app-nav-menu .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+    transition: background 0.15s ease, color 0.15s ease;
+    font-weight: 500;
+}
+
+.app-nav-menu .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.app-nav-menu > .nav-item.app-nav-branch--open > .nav-link[data-name="module_header"],
+.app-nav-menu .nav-link[data-name="module_header"].active {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #fff !important;
+}
+
+/* Submenu */
+.app-nav-submenu {
     flex-direction: column;
     flex-wrap: nowrap;
-    width: 100%;
-    padding-left: 0.25rem;
 }
 
-.app-sidebar .app-nav-submenu .nav-link {
-    font-size: 0.9rem;
-    padding: 0.4rem 1rem 0.4rem 2rem;
-    border-radius: 8px;
-    margin: 1px 0.5rem;
-    color: rgba(255, 255, 255, 0.75);
+.app-nav-submenu .nav-link {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.65) !important;
 }
 
-.app-sidebar[class*="sidebar-light"] .app-nav-submenu .nav-link {
-    color: #475569;
+.app-nav-submenu .nav-link.active {
+    background: rgba(99, 102, 241, 0.3) !important;
+    color: #fff !important;
 }
 
-.app-sidebar .app-nav-submenu .nav-link.active {
-    background: rgba(79, 70, 229, 0.25);
-    color: #fff;
+/* Ícono rotar cuando está abierto */
+.app-nav-item--branch.app-nav-branch--open > .nav-link .right {
+    transform: rotate(-90deg);
 }
 
-.app-sidebar .app-nav-menu .nav-link p {
-    margin: 0;
-    display: inline;
+.app-nav-item--branch > .nav-link .right {
+    transition: transform 0.2s ease;
 }
 
-.app-sidebar .app-sidebar-nav-icon {
-    margin-right: 0.45rem;
-    width: 1.35rem;
-    text-align: center;
+/* ===== COLORES DE SIDEBAR (claves del modelo Dashboard) ===== */
+/* Variantes oscuras */
+.fb-sidebar[class*="sidebar-dark"],
+aside[class*="sidebar-dark"] {
+    background-color: #1e2235;
+    color: rgba(255, 255, 255, 0.85);
 }
 
-/* ---------- Área de contenido ---------- */
-.app-main {
-    background: #f1f5f9;
+.fb-sidebar.sidebar-dark-primary,
+aside.sidebar-dark-primary { border-right: 3px solid #6366f1; }
+
+.fb-sidebar.sidebar-dark-info,
+aside.sidebar-dark-info { border-right: 3px solid #0ea5e9; }
+
+.fb-sidebar.sidebar-dark-success,
+aside.sidebar-dark-success { border-right: 3px solid #10b981; }
+
+.fb-sidebar.sidebar-dark-warning,
+aside.sidebar-dark-warning { border-right: 3px solid #f59e0b; }
+
+.fb-sidebar.sidebar-dark-danger,
+aside.sidebar-dark-danger { border-right: 3px solid #ef4444; }
+
+.fb-sidebar.sidebar-dark-indigo,
+aside.sidebar-dark-indigo { border-right: 3px solid #4f46e5; }
+
+.fb-sidebar.sidebar-dark-purple,
+aside.sidebar-dark-purple { border-right: 3px solid #8b5cf6; }
+
+.fb-sidebar.sidebar-dark-pink,
+aside.sidebar-dark-pink { border-right: 3px solid #ec4899; }
+
+.fb-sidebar.sidebar-dark-teal,
+aside.sidebar-dark-teal { border-right: 3px solid #14b8a6; }
+
+.fb-sidebar.sidebar-dark-cyan,
+aside.sidebar-dark-cyan { border-right: 3px solid #06b6d4; }
+
+.fb-sidebar.sidebar-dark-lightblue,
+aside.sidebar-dark-lightblue { border-right: 3px solid #0284c7; }
+
+.fb-sidebar.sidebar-dark-navy,
+aside.sidebar-dark-navy { background-color: #0f2547; border-right: 3px solid #1d4ed8; }
+
+.fb-sidebar.sidebar-dark-fuchsia,
+aside.sidebar-dark-fuchsia { border-right: 3px solid #d946ef; }
+
+.fb-sidebar.sidebar-dark-maroon,
+aside.sidebar-dark-maroon { background-color: #2d0a0a; border-right: 3px solid #991b1b; }
+
+.fb-sidebar.sidebar-dark-orange,
+aside.sidebar-dark-orange { border-right: 3px solid #f97316; }
+
+.fb-sidebar.sidebar-dark-lime,
+aside.sidebar-dark-lime { border-right: 3px solid #84cc16; }
+
+.fb-sidebar.sidebar-dark-olive,
+aside.sidebar-dark-olive { border-right: 3px solid #65a30d; }
+
+/* Variantes claras */
+.fb-sidebar[class*="sidebar-light"],
+aside[class*="sidebar-light"] {
+    background-color: #ffffff;
+    color: #1e2235;
+    border-right: 1px solid #e5e7eb;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.05);
 }
 
-.app-main__toolbar {
-    padding-top: 1rem;
-    padding-bottom: 0.5rem;
+.fb-sidebar[class*="sidebar-light"] .fb-sidebar__brand,
+aside[class*="sidebar-light"] .fb-sidebar__brand {
+    color: #1e2235;
+    border-bottom-color: #e5e7eb;
 }
 
-.app-main__body {
-    padding-bottom: 1.5rem;
+.fb-sidebar[class*="sidebar-light"] .fb-sidebar__user,
+aside[class*="sidebar-light"] .fb-sidebar__user {
+    color: #374151;
+    border-bottom-color: #e5e7eb;
 }
 
-/* ---------- Pie ---------- */
-.app-footer {
+.fb-sidebar[class*="sidebar-light"] .app-nav-section-title,
+aside[class*="sidebar-light"] .app-nav-section-title {
+    color: #9ca3af;
+}
+
+.fb-sidebar[class*="sidebar-light"] .app-nav-menu .nav-link,
+aside[class*="sidebar-light"] .app-nav-menu .nav-link {
+    color: #374151 !important;
+}
+
+.fb-sidebar[class*="sidebar-light"] .app-nav-menu .nav-link:hover,
+aside[class*="sidebar-light"] .app-nav-menu .nav-link:hover {
+    background: #f3f4f6 !important;
+    color: #111827 !important;
+}
+
+.fb-sidebar[class*="sidebar-light"] .app-nav-submenu .nav-link,
+aside[class*="sidebar-light"] .app-nav-submenu .nav-link {
+    color: #6b7280 !important;
+}
+
+/* ===== HEADER / NAVBAR ===== */
+.fb-header {
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+}
+
+.fb-nav-link {
+    color: inherit !important;
+    text-decoration: none !important;
+    transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.fb-nav-link:hover {
+    text-decoration: none !important;
+}
+
+/* Colores de navbar (claves del modelo Dashboard) */
+/* Oscuras */
+.navbar-dark.navbar-primary  { background: #4f46e5 !important; color: #fff; }
+.navbar-dark.navbar-secondary { background: #475569 !important; color: #fff; }
+.navbar-dark.navbar-info      { background: #0284c7 !important; color: #fff; }
+.navbar-dark.navbar-success   { background: #059669 !important; color: #fff; }
+.navbar-dark.navbar-danger    { background: #dc2626 !important; color: #fff; }
+.navbar-dark.navbar-indigo    { background: #4338ca !important; color: #fff; }
+.navbar-dark.navbar-purple    { background: #7c3aed !important; color: #fff; }
+.navbar-dark.navbar-pink      { background: #db2777 !important; color: #fff; }
+.navbar-dark.navbar-navy      { background: #1e3a5f !important; color: #fff; }
+.navbar-dark.navbar-lightblue { background: #0369a1 !important; color: #fff; }
+.navbar-dark.navbar-teal      { background: #0d9488 !important; color: #fff; }
+.navbar-dark.navbar-cyan      { background: #0891b2 !important; color: #fff; }
+.navbar-dark.navbar-dark      { background: #111827 !important; color: #fff; }
+.navbar-dark.navbar-gray-dark { background: #374151 !important; color: #fff; }
+.navbar-dark.navbar-gray      { background: #6b7280 !important; color: #fff; }
+
+/* Claras */
+.navbar-light.navbar-light,
+.navbar-light.navbar-white  { background: #ffffff !important; color: #111827; border-bottom: 1px solid #e5e7eb; }
+.navbar-light.navbar-warning { background: #fef3c7 !important; color: #111827; }
+.navbar-light.navbar-orange  { background: #ffedd5 !important; color: #111827; }
+
+/* Colores de texto en navbar oscura */
+[class*="navbar-dark"] .fb-nav-link { color: rgba(255,255,255,0.9) !important; }
+[class*="navbar-dark"] .fb-nav-link:hover { color: #fff !important; }
+
+/* Colores de texto en navbar clara */
+.navbar-light .fb-nav-link,
+[class*="navbar-white"] .fb-nav-link,
+.navbar-light .fb-nav-link { color: #374151 !important; }
+
+/* ===== DROPDOWN FLOWBITE-STYLE ===== */
+.fb-dropdown {
+    border-radius: 12px !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12) !important;
+    overflow: hidden;
+    padding: 4px;
+}
+
+.fb-dropdown-item {
+    border-radius: 8px !important;
+    margin: 2px 4px !important;
+    width: auto !important;
+    font-size: 0.875rem;
+    transition: background 0.12s ease;
+}
+
+.fb-dropdown-item:hover {
+    background: #f5f3ff !important;
+    color: #4f46e5 !important;
+}
+
+/* ===== ÁREA PRINCIPAL ===== */
+.fb-main {
+    background-color: #f9fafb;
+    flex: 1;
+}
+
+.fb-toolbar {
+    border-bottom: 1px solid #e5e7eb;
+    background: #fff;
+}
+
+.fb-content {
+    padding-top: 1.25rem;
+}
+
+/* ===== BREADCRUMB ===== */
+.fb-breadcrumb {
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 10px !important;
+    padding: 0.55rem 1rem !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    margin-bottom: 0;
+}
+
+.fb-breadcrumb .breadcrumb-item a {
+    color: #4f46e5 !important;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.fb-breadcrumb .breadcrumb-item.active a {
+    color: #6b7280 !important;
+}
+
+/* ===== CARDS (claves del modelo Dashboard) ===== */
+.fb-card {
+    border-radius: 14px !important;
+    border: 1px solid #e5e7eb !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+    overflow: hidden;
+    background: #fff !important;
+}
+
+.fb-card__header.card-header {
+    background: #f9fafb !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    padding: 0.85rem 1.25rem;
+}
+
+.fb-card__header .card-title {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0;
+    color: #111827;
+}
+
+.fb-card__footer.card-footer {
+    background: #f9fafb !important;
+    border-top: 1px solid #e5e7eb !important;
+    padding: 0.75rem 1.25rem;
+}
+
+/* Tarjetas con color en el header según el dashboard model */
+.fb-card.card-primary .fb-card__header        { background: #4f46e5 !important; }
+.fb-card.card-primary .fb-card__header .card-title { color: #fff !important; }
+.fb-card.card-primary .fb-card__header .text-indigo-500 { color: rgba(255,255,255,0.8) !important; }
+
+.fb-card.card-info .fb-card__header           { background: #0284c7 !important; }
+.fb-card.card-info .fb-card__header .card-title { color: #fff !important; }
+
+.fb-card.card-success .fb-card__header        { background: #059669 !important; }
+.fb-card.card-success .fb-card__header .card-title { color: #fff !important; }
+
+.fb-card.card-danger .fb-card__header         { background: #dc2626 !important; }
+.fb-card.card-danger .fb-card__header .card-title { color: #fff !important; }
+
+.fb-card.card-warning .fb-card__header        { background: #d97706 !important; }
+.fb-card.card-warning .fb-card__header .card-title { color: #fff !important; }
+
+.fb-card.card-dark .fb-card__header           { background: #1e293b !important; }
+.fb-card.card-dark .fb-card__header .card-title { color: #fff !important; }
+
+.fb-card.card-secondary .fb-card__header,
+.fb-card.card-gray .fb-card__header          { background: #64748b !important; }
+.fb-card.card-secondary .fb-card__header .card-title,
+.fb-card.card-gray .fb-card__header .card-title { color: #fff !important; }
+
+.fb-card.card-indigo .fb-card__header         { background: #4338ca !important; }
+.fb-card.card-indigo .fb-card__header .card-title { color: #fff !important; }
+
+.fb-card.card-teal .fb-card__header           { background: #0d9488 !important; }
+.fb-card.card-teal .fb-card__header .card-title { color: #fff !important; }
+
+.fb-card.card-outline .fb-card__header        { background: #f9fafb !important; }
+.fb-card.card-outline                         { border-top: 2px solid #6366f1 !important; }
+
+/* ===== TABLA FLOWBITE ===== */
+.fb-table thead th {
+    background: #f9fafb;
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-color: #e5e7eb !important;
+    border-top: none !important;
+}
+
+.fb-table tbody tr:hover {
+    background: #f5f3ff;
+}
+
+.fb-table-head th {
+    background: #f9fafb;
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-color: #e5e7eb !important;
+}
+
+/* ===== PIE DE PÁGINA ===== */
+.fb-footer {
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
     margin-top: auto;
 }
 
-/* ---------- Submenús en dropdown (layout horizontal) ---------- */
+/* ===== SUBMENÚS EN HORIZONTAL ===== */
 .dropdown-submenu {
     position: relative;
 }
 
-/* Solape leve con el padre: evita un “hueco” donde se pierde :hover y el submenú se cierra antes del clic. */
 .dropdown-submenu > .dropdown-menu {
     top: 0;
     left: calc(100% - 6px);
     margin-top: 0;
-    margin-left: 0;
 }
 
 .dropdown-submenu > a::after {
-    transform: rotate(-90deg);
-    float: right;
-    margin-top: 0.35rem;
+    display: none;
 }
 
-/* Escritorio: submenú por hover o por clase (accesibilidad / clic en el título del tipo). */
 @media (min-width: 768px) {
     .dropdown-hover.dropdown-submenu:hover > .dropdown-menu,
     .dropdown-hover.dropdown-submenu.submenu-abierto > .dropdown-menu {
@@ -380,12 +462,8 @@
     }
 }
 
-/* Móvil: no hay hover; el JS alterna .submenu-abierto (main.js). */
 @media (max-width: 767.98px) {
-    .dropdown-submenu > .dropdown-menu {
-        display: none;
-    }
-
+    .dropdown-submenu > .dropdown-menu { display: none; }
     .dropdown-submenu.submenu-abierto > .dropdown-menu {
         display: block;
         position: static;
@@ -395,71 +473,162 @@
     }
 }
 
-/* Fila del sidebar abierta por encima de la siguiente (evita que otro ítem “robe” el clic al subárbol). */
-.app-sidebar .app-nav-menu > .nav-item.app-nav-item--branch.app-nav-branch--open {
+/* ===== DASHBOARD MÉTRICAS ===== */
+.app-dash-metric {
+    display: flex;
+    align-items: stretch;
+    min-height: 80px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    overflow: hidden;
+    background: #fff;
+    margin-bottom: 1rem;
+}
+
+.app-dash-metric__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    color: #fff;
+    font-size: 1.35rem;
+}
+
+.app-dash-metric__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+}
+
+.app-dash-metric__label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #9ca3af;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.app-dash-metric__value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.1;
+}
+
+/* ===== PESTAÑA FLOWBITE ===== */
+.fb-tab {
+    border-radius: 8px 8px 0 0 !important;
+    font-weight: 500;
+    color: #6b7280 !important;
+    border: none !important;
+    padding: 0.6rem 1rem;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.fb-tab:hover {
+    color: #4f46e5 !important;
+    background: #f5f3ff !important;
+}
+
+.fb-tab.active {
+    color: #4f46e5 !important;
+    font-weight: 600 !important;
+    border-bottom: 2px solid #4f46e5 !important;
+    background: transparent !important;
+}
+
+/* ===== PÁGINA DE LOGIN ===== */
+.fb-login-page {
+    min-height: 100vh;
+    background: linear-gradient(145deg, #1e1b4b 0%, #312e81 40%, #4f46e5 100%) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+
+.fb-login-wrapper {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.fb-login-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2.5rem 2rem 2rem;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+}
+
+.fb-login-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #ede9fe;
+    color: #4f46e5;
+    margin-bottom: 0.5rem;
+}
+
+.fb-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 0.35rem;
+}
+
+.fb-input-wrapper {
     position: relative;
-    z-index: 4;
 }
 
-/* ---------- Tarjetas con acento (claves del modelo Dashboard / tarjetas Bootstrap) ---------- */
-.card.card-primary:not(.card-outline) > .card-header {
-    background: #4f46e5;
-    color: #fff;
-    border: none;
+.fb-input-wrapper .fb-input-icon {
+    position: absolute;
+    left: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
 }
 
-.card.card-primary {
-    border-top: 3px solid #4f46e5;
+.fb-input-wrapper .form-control {
+    padding-left: 2.5rem;
 }
 
-.card.card-success:not(.card-outline) > .card-header {
-    background: #059669;
-    color: #fff;
-    border: none;
+.fb-input-wrapper-group .form-control {
+    border-radius: 8px 0 0 8px !important;
 }
 
-.card.card-danger:not(.card-outline) > .card-header {
-    background: #dc2626;
-    color: #fff;
-    border: none;
+/* ===== TARJETAS DE MÓDULO (horizontal dashboard) ===== */
+.fb-module-card {
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-.card.card-info:not(.card-outline) > .card-header {
-    background: #0284c7;
-    color: #fff;
-    border: none;
+.fb-module-card:hover {
+    transform: translateY(-2px);
 }
 
-.card.card-warning:not(.card-outline) > .card-header {
-    background: #d97706;
-    color: #fff;
-    border: none;
+.fb-module-card.card-icon-selected {
+    background: #ede9fe !important;
+    border-color: #6366f1 !important;
 }
 
-.card.card-dark:not(.card-outline) > .card-header {
-    background: #1e293b;
-    color: #fff;
-    border: none;
+/* ===== UTILIDADES GLOBALES ===== */
+.btn-xs {
+    padding: 0.15rem 0.45rem;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    border-radius: 6px !important;
 }
 
-.card.card-secondary:not(.card-outline) > .card-header,
-.card.card-gray:not(.card-outline) > .card-header {
-    background: #64748b;
-    color: #fff;
-    border: none;
-}
-
-.card.card-indigo:not(.card-outline) > .card-header {
-    background: #4338ca;
-    color: #fff;
-    border: none;
-}
-
-.card.card-outline {
-    border-top: none;
-}
-
-.card.card-outline > .card-header {
-    background: #f8fafc;
-    border-bottom: 1px solid #e2e8f0;
-}
+.badge-pill { border-radius: 50rem !important; }
+.badge-secondary { background-color: #6b7280 !important; }
